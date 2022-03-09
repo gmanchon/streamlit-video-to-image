@@ -25,7 +25,7 @@ if uploaded_file is not None:
 
         if response.status_code == 200:
 
-            # save image
+            # save image https://betterprogramming.pub/how-to-download-streaming-responses-as-a-file-in-python-51b52943f4e7
             local_filename = "downloaded.gif"
             with open(local_filename, "wb") as f:
                 shutil.copyfileobj(response.raw, f)
