@@ -2,6 +2,8 @@
 import streamlit as st
 
 import requests
+import shutil
+import base64
 
 st.set_option("deprecation.showfileUploaderEncoding", False)
 uploaded_file = st.file_uploader("Choose a video", type="mp4")
@@ -19,10 +21,24 @@ if uploaded_file is not None:
         "in_file": bytesdata
     }
 
-    response = requests.post(url, files=files)
+    with requests.post(url, files=files, stream=True) as response:
 
-    if response.status_code == 200:
-        resp = response.json()
-        resp
-    else:
-        "😬 api error 🤖"
+        if response.status_code == 200:
+
+            # save image
+            local_filename = "downloaded.gif"
+            with open(local_filename, "wb") as f:
+                shutil.copyfileobj(response.raw, f)
+
+            # display image
+            with open(local_filename, "rb") as f:
+
+                content = f.read()
+
+                data_url = base64.b64encode(content).decode("utf-8")
+                st.markdown(
+                    f'<img src="data:image/gif;base64,{data_url}" alt="the gif">',
+                    unsafe_allow_html=True)
+
+        else:
+            "😬 api error 🤖"
