@@ -30,7 +30,7 @@ if uploaded_file is not None:
             with open(local_filename, "wb") as f:
                 shutil.copyfileobj(response.raw, f)
 
-            # display image
+            # display image https://discuss.streamlit.io/t/how-to-show-local-gif-image/3408/3
             with open(local_filename, "rb") as f:
 
                 content = f.read()
